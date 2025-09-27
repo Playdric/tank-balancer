@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="left_wing_fuel">"Essence Aile Gauche "</string>
+    <string name="right_wing_fuel">Essence Aile Droite</string>
+    <string name="estimated_fuel_flow">Fuel Flow Estimé</string>
+    <string name="fuel_unit">Unité de Volume</string>
+    <string name="starting_tank">Aile de Début</string>
+    <string name="validate">Valider</string>
+    <string name="left">Gauche</string>
+    <string name="right">Droit</string>
+    <string name="take_off">Décollage !</string>
+    <string name="total_time">Temps Total</string>
+    <string name="total_time_left">Temps Total (G)</string>
+    <string name="total_time_right">Temps Total (D)</string>
+</resources>

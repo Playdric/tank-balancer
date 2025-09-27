@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="left_wing_fuel">Left Wing Fuel</string>
+    <string name="right_wing_fuel">Right Wing Fuel</string>
+    <string name="estimated_fuel_flow">Estimated Fuel Flow</string>
+    <string name="fuel_unit">Fuel Unit</string>
+    <string name="starting_tank">Starting Tank</string>
+    <string name="validate">Validate</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
+    <string name="take_off">Take Off !</string>
+    <string name="total_time">Total Time</string>
+    <string name="total_time_left">Total Time (L)</string>
+    <string name="total_time_right">Total Time (R)</string>
+</resources>
