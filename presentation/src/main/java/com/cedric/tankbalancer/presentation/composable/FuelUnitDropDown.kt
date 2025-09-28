@@ -18,9 +18,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cedric.domain.model.FuelUnit
+import com.cedric.tankbalancer.presentation.R
 import com.cedric.tankbalancer.presentation.theme.spacing
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,9 +70,10 @@ fun FuelUnitDropDownMenu(
     }
 }
 
+@Composable
 private fun FuelUnit.asString(): String = when (this) {
-    FuelUnit.METRIC -> "L"
-    FuelUnit.IMPERIAL -> "gal"
+    FuelUnit.METRIC -> stringResource(R.string.unit_liter)
+    FuelUnit.IMPERIAL -> stringResource(R.string.unit_gallon)
 }
 
 

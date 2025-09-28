@@ -30,7 +30,7 @@ timber = "5.0.1"
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "materialIcon" }
+androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended-android", version.ref = "materialIcon" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "composeRuntime" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }

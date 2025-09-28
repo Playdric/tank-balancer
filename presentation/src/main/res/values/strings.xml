@@ -12,4 +12,13 @@
     <string name="total_time">Total Time</string>
     <string name="total_time_left">Total Time (L)</string>
     <string name="total_time_right">Total Time (R)</string>
+    <string name="land">Land</string>
+    <string name="warning">Warning</string>
+    <string name="warning_landing">Are you sur you want to land ?</string>
+    <string name="flight_ended">Flight Ended</string>
+    <string name="switch_tank">Switch Tank</string>
+    <string name="confirm">Confirm</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="unit_liter">L</string>
+    <string name="unit_gallon">gal</string>
 </resources>

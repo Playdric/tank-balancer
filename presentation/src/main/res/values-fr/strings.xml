@@ -12,4 +12,13 @@
     <string name="total_time">Temps Total</string>
     <string name="total_time_left">Temps Total (G)</string>
     <string name="total_time_right">Temps Total (D)</string>
+    <string name="land">Atterir</string>
+    <string name="warning">Attention</string>
+    <string name="warning_landing">Êtes-vous sûr de vouloir atterir ?</string>
+    <string name="flight_ended">Vol terminé</string>
+    <string name="switch_tank">Changer de réservoir</string>
+    <string name="confirm">Confirmer</string>
+    <string name="dismiss">Annuler</string>
+    <string name="unit_liter">L</string>
+    <string name="unit_gallon">gal</string>
 </resources>

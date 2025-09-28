@@ -18,8 +18,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.rememberTextMeasurer
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cedric.domain.model.AircraftTank
 
@@ -113,14 +113,15 @@ fun Aircraft(
         drawPath(leftWingPath, color = if (currentTank == AircraftTank.LEFT) Color.Green else Color.Red, style = Stroke(width = factor))
         drawPath(rightWingPath, color = if (currentTank == AircraftTank.RIGHT) Color.Green else Color.Red, style = Stroke(width = factor))
 
-        val offset = when (currentTank) {
+        val durationOffsetY = canvasHeight / 1.6f - durationTextLayoutResult.size.height - 10 * factor
+        val durationOffset = when (currentTank) {
             AircraftTank.LEFT -> Offset(
                 x = middleX / 2f - durationTextLayoutResult.size.width / 2,
-                y = canvasHeight / 2f - durationTextLayoutResult.size.height - 10 * factor
+                y = durationOffsetY
             )
             AircraftTank.RIGHT -> Offset(
                 x = middleX + middleX / 2f - durationTextLayoutResult.size.width / 2,
-                y = canvasHeight / 2f - durationTextLayoutResult.size.height - 10 * factor
+                y = durationOffsetY
             )
             null -> return@Canvas
         }
@@ -129,7 +130,7 @@ fun Aircraft(
             textMeasurer = durationTextMeasurer,
             text = durationText,
             style = style,
-            topLeft = offset
+            topLeft = durationOffset
         )
 
         drawText(
@@ -138,7 +139,7 @@ fun Aircraft(
             style = style,
             topLeft = Offset(
                 x = middleX / 2f - leftFuelTextLayoutResult.size.width / 2,
-                y = canvasHeight / 2f
+                y = canvasHeight / 2.3f
             )
         )
 
@@ -148,7 +149,7 @@ fun Aircraft(
             style = style,
             topLeft = Offset(
                 x = middleX + middleX / 2f - rightFuelTextLayoutResult.size.width / 2,
-                y = canvasHeight / 2f
+                y = canvasHeight / 2.3f
             )
         )
     }
@@ -157,7 +158,11 @@ fun Aircraft(
 @Preview(showBackground = true)
 @Composable
 fun AircraftPreview() {
-    Box(modifier = Modifier.width(300.dp).height(230.dp)) {
+    Box(
+        modifier = Modifier
+            .width(300.dp)
+            .height(230.dp)
+    ) {
         Aircraft(
             currentTank = AircraftTank.LEFT,
             currentTime = "10:00",

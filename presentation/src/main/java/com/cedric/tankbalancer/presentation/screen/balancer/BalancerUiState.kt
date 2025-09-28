@@ -1,14 +1,15 @@
 package com.cedric.tankbalancer.presentation.screen.balancer
 
 import com.cedric.domain.model.AircraftTank
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 
 data class BalancerUiState(
     val currentTank: AircraftTank? = null,
-
     val fuelFlow: Double = 10.0,
-
     val totalTime: String = "00:00",
+    val currentTankTime: String = "00:00",
 
     val leftTankLapTime: String = "00:00",
     val leftTankTotalTime: String = "00:00",
@@ -20,11 +21,23 @@ data class BalancerUiState(
 
     val range: String = "00:00",
 
-    val isFlying: Boolean = false,
+    val lapTimes: ImmutableList<UiLapTime> = persistentListOf(),
+
+    val flightStatus: FlightStatus = FlightStatus.BEFORE_TAKE_OFF,
 
     val balancerError: BalancerError? = null,
 )
 
-enum class BalancerError {
-    TAKE_OFF_WILE_NOT_SETUP,
+data class UiLapTime(
+    val tank: AircraftTank,
+    val startTime: String,
+)
+
+enum class BalancerError
+
+enum class FlightStatus {
+    BEFORE_TAKE_OFF,
+    FLYING,
+    STOPOVER,
+    LANDED
 }

@@ -11,14 +11,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface FuelFlowDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFuelFlow(fuelFlow: FuelFlow)
+    suspend fun insertFuelFlow(fuelFlowEntity: FuelFlowEntity)
 
     @Update
-    suspend fun updateFuelFlow(fuelFlow: FuelFlow)
+    suspend fun updateFuelFlow(fuelFlowEntity: FuelFlowEntity)
 
     @Delete
-    suspend fun deleteFuelFlow(fuelFlow: FuelFlow)
+    suspend fun deleteFuelFlow(fuelFlowEntity: FuelFlowEntity)
 
     @Query("SELECT * FROM FuelFlow WHERE id = :id")
-    fun getFuelFlowById(id: Int): Flow<FuelFlow?>
+    fun getFuelFlowById(id: Int): Flow<FuelFlowEntity?>
 }

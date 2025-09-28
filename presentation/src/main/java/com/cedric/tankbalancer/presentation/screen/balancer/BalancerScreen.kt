@@ -5,35 +5,48 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices.PIXEL_9_PRO
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.cedric.domain.model.AircraftTank
 import com.cedric.tankbalancer.presentation.R
 import com.cedric.tankbalancer.presentation.composable.Aircraft
 import com.cedric.tankbalancer.presentation.composable.ErrorDialog
+import com.cedric.tankbalancer.presentation.composable.RepeatIconButton
 import com.cedric.tankbalancer.presentation.navigation.TankBalancerNavEntry
 import com.cedric.tankbalancer.presentation.theme.TankBalancerTheme
 import com.cedric.tankbalancer.presentation.theme.spacing
@@ -52,6 +65,11 @@ fun BalancerScreen(
 
     viewModel.setArguments(arguments)
 
+    LaunchedEffect(Unit) {
+        viewModel.uiState.collect {
+        }
+    }
+
     LaunchedEffect(navigationEvent) {
         navigationEvent?.let { navigate.invoke(it) }
     }
@@ -62,10 +80,11 @@ fun BalancerScreen(
 
 @Composable
 fun BalancerScreenContent(uiState: BalancerUiState, action: (BalancerAction) -> Unit = {}) {
+    var showLandingDialog by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .then(if (uiState.balancerError != null) Modifier.blur(30.dp) else Modifier)
+            .then(if (uiState.balancerError != null || showLandingDialog) Modifier.blur(30.dp) else Modifier)
     ) {
         TotalTimes(
             leftTankTotalTime = uiState.leftTankTotalTime,
@@ -80,91 +99,155 @@ fun BalancerScreenContent(uiState: BalancerUiState, action: (BalancerAction) -> 
         ) {
             Aircraft(
                 currentTank = uiState.currentTank,
-                currentTime = uiState.totalTime,
+                currentTime = uiState.currentTankTime,
                 leftFuel = uiState.leftTankFuel,
                 rightFuel = uiState.rightTankFuel,
                 darkTheme = isSystemInDarkTheme(),
             )
         }
-        if (!uiState.isFlying) {
-            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Button(onClick = {
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+        when (uiState.flightStatus) {
+            FlightStatus.BEFORE_TAKE_OFF -> {
+                BeforeTakeOffControls(onClickTakeOff = {
                     action.invoke(BalancerAction.TakeOff)
-                }) {
-                    Text(stringResource(R.string.take_off))
-                }
+                })
+            }
+
+            FlightStatus.FLYING -> {
+                FlyingControls(
+                    onRepeatDecrease = { action(BalancerAction.DecreaseFuelFlow) },
+                    onReleaseDecrease = { action(BalancerAction.ValidFuelFlow) },
+                    onRepeatIncrease = { action(BalancerAction.IncreaseFuelFlow) },
+                    onReleaseIncrease = { action(BalancerAction.ValidFuelFlow) },
+                    onClickSwitchTank = { action(BalancerAction.SwitchTank) },
+                    fuelFlow = uiState.fuelFlow,
+                )
+            }
+
+            FlightStatus.STOPOVER -> {}
+            FlightStatus.LANDED -> {
+                Landed()
             }
         }
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         LapTimes(
-            lapTimes = persistentListOf(
-                "1:20",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:20",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:20",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:20",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:20",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:20",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:20",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:20",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:20",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:30",
-                "1:40",
-                "1:50",
-                "1:20",
-                "1:30",
-                "1:40",
-                "1:50",
-            )
+            lapTimes = uiState.lapTimes
         )
+        if (uiState.flightStatus == FlightStatus.FLYING) {
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = MaterialTheme.spacing.medium), horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(onClick = {
+                    showLandingDialog = true
+                }) {
+                    Text(stringResource(R.string.land))
+                }
+            }
+        }
     }
 
-    if (uiState.balancerError != null) {
-        when (uiState.balancerError) {
-            BalancerError.TAKE_OFF_WILE_NOT_SETUP -> {
-                ErrorDialog(
-                    onDismissRequest = { action.invoke(BalancerAction.AcknowledgeError) },
-                    onConfirmation = { action.invoke(BalancerAction.AcknowledgeError) },
-                    dialogTitle = "Warning",
-                    dialogText = "Cannot Take Off before setup",
-                )
-            }
+    if (showLandingDialog) {
+        ErrorDialog(
+            onDismissRequest = { showLandingDialog = false },
+            onConfirmation = {
+                action(BalancerAction.ConfirmLanding)
+                showLandingDialog = false
+            },
+            dialogTitle = stringResource(R.string.warning),
+            dialogText = stringResource(R.string.warning_landing),
+        )
+    }
+}
+
+@Composable
+fun Landed() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = MaterialTheme.spacing.medium), horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            modifier = Modifier
+                .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
+                .background(MaterialTheme.colorScheme.secondaryContainer)
+                .padding(MaterialTheme.spacing.large),
+            style = MaterialTheme.typography.titleLarge,
+            text = stringResource(R.string.flight_ended)
+        )
+    }
+}
+
+@Composable
+private fun FlyingControls(
+    onRepeatDecrease: () -> Unit,
+    onReleaseDecrease: () -> Unit,
+    onRepeatIncrease: () -> Unit,
+    onReleaseIncrease: () -> Unit,
+    onClickSwitchTank: () -> Unit,
+    fuelFlow: Double,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = MaterialTheme.spacing.medium), horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RepeatIconButton(
+            onRepeat = onRepeatDecrease,
+            onRelease = onReleaseDecrease,
+            icon = Icons.Default.Remove,
+            enabled = fuelFlow > 0
+        )
+        Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+        val color = MaterialTheme.colorScheme.surfaceContainer
+        Text(
+            modifier = Modifier
+                .drawBehind {
+                    drawRoundRect(
+                        color = color,
+                        cornerRadius = CornerRadius(20F, 20F)
+                    )
+                }
+                .padding(start = MaterialTheme.spacing.medium, end = MaterialTheme.spacing.medium),
+            text = fuelFlow.toString(),
+            style = MaterialTheme.typography.displayMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+
+        RepeatIconButton(
+            onRepeat = onRepeatIncrease,
+            onRelease = onReleaseIncrease,
+            icon = Icons.Default.Add,
+        )
+    }
+    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = MaterialTheme.spacing.medium), horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(onClick = onClickSwitchTank) {
+            Text(stringResource(R.string.switch_tank))
+        }
+    }
+}
+
+@Composable
+fun BeforeTakeOffControls(onClickTakeOff: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Button(onClick = onClickTakeOff) {
+            Text(stringResource(R.string.take_off))
         }
     }
 }
@@ -282,17 +365,53 @@ fun TotalTimes(
 }
 
 @Composable
-fun LapTimes(
+fun ColumnScope.LapTimes(
     modifier: Modifier = Modifier,
-    lapTimes: ImmutableList<String>
+    lapTimes: ImmutableList<UiLapTime>
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth()
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .weight(1F)
+            .padding(horizontal = MaterialTheme.spacing.medium)
+            .clip(RoundedCornerShape(MaterialTheme.spacing.medium)),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        items(items = lapTimes) { item ->
-            Text(item)
+        LazyColumn(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+        ) {
+            items(items = lapTimes) { item ->
+                LapTimeItem(
+                    tank = item.tank,
+                    startTime = item.startTime,
+                )
+            }
         }
     }
+}
+
+@Composable
+fun LapTimeItem(
+    tank: AircraftTank,
+    startTime: String,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(MaterialTheme.spacing.medium))
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .padding(MaterialTheme.spacing.medium),
+    ) {
+        Text(
+            modifier = Modifier
+                .fillMaxWidth(),
+            text = startTime,
+            textAlign = if (tank == AircraftTank.LEFT) TextAlign.Left else TextAlign.Right
+        )
+    }
+
 }
 
 @Preview(device = PIXEL_9_PRO)
@@ -316,8 +435,90 @@ fun PreviewBalancerScreen() {
                     rightTankLapTime = "",
                     rightTankFuel = 12.21,
                     range = "fd",
-                    isFlying = false,
+                    flightStatus = FlightStatus.FLYING,
                     balancerError = null,
+                    lapTimes = persistentListOf(
+                        UiLapTime(
+                            tank = AircraftTank.LEFT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.RIGHT,
+                            startTime = "00:01"
+                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.LEFT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.RIGHT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.LEFT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.RIGHT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.LEFT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.RIGHT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.LEFT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.RIGHT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.LEFT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.RIGHT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.LEFT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.RIGHT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.LEFT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.RIGHT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.LEFT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.RIGHT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.LEFT,
+//                            startTime = "00:01"
+//                        ),
+//                        UiLapTime(
+//                            tank = AircraftTank.RIGHT,
+//                            startTime = "00:01"
+//                        ),
+                    )
                 )
             )
         }

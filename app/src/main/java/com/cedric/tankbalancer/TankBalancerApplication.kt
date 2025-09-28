@@ -2,6 +2,7 @@ package com.cedric.tankbalancer
 
 import android.app.Application
 import com.cedric.data.di.dataModule
+import com.cedric.domain.di.domainModule
 import com.cedric.tankbalancer.presentation.di.presentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -22,6 +23,7 @@ class TankBalancerApplication : Application() {
             modules(
                 presentationModule,
                 dataModule,
+                domainModule
             )
         }
     }
