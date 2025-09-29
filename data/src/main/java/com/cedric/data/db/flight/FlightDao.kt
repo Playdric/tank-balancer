@@ -23,13 +23,13 @@ interface FlightDao {
     @Query("SELECT * FROM Flight WHERE id = :id")
     fun getFlightById(id: Int): Flow<FlightEntity?>
 
-    @Query("SELECT * FROM Flight WHERE endTimestamp IS NULL LIMIT 1")
+    @Query("SELECT * FROM Flight ORDER BY id DESC LIMIT 1")
     fun getCurrentFlight(): Flow<FlightEntity?>
 
-    @Query("SELECT * FROM Flight WHERE endTimestamp IS NULL LIMIT 1")
+    @Query("SELECT * FROM Flight ORDER BY id DESC LIMIT 1")
     fun getCurrentFlightSync(): FlightEntity?
 
     @Transaction
-    @Query("SELECT * FROM Flight WHERE endTimestamp IS NULL LIMIT 1")
+    @Query("SELECT * FROM Flight ORDER BY id DESC LIMIT 1")
     fun getCurrentFlightWithDetails(): Flow<FlightWithDetailsEntity?>
 }

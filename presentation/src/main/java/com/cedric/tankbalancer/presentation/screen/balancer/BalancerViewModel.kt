@@ -81,7 +81,8 @@ class BalancerViewModel(
             flightRepository.land(onError = {}) {
                 _uiState.update {
                     it.copy(
-                        flightStatus = FlightStatus.LANDED
+                        flightStatus = FlightStatus.LANDED,
+                        currentTank = null
                     )
                 }
                 tickerRepository.stopTick()
