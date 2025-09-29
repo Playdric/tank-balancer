@@ -127,6 +127,7 @@ class BalancerViewModel(
     private fun takeOff() {
         viewModelScope.launch {
             flightRepository.takeOff(
+                initialTank = arguments.initialTank,
                 initialLeftFuel = arguments.initialFuelLeft,
                 initialRightFuel = arguments.initialFuelRight,
                 initialFuelFlow = arguments.initialFuelFlow,

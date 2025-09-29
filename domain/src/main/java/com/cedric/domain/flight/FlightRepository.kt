@@ -9,6 +9,7 @@ interface FlightRepository {
     val currentFlight: Flow<Flight>
 
     suspend fun takeOff(
+        initialTank: AircraftTank,
         initialLeftFuel: Double,
         initialRightFuel: Double,
         initialFuelFlow: Double,

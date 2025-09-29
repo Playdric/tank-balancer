@@ -30,7 +30,7 @@ class FlightRepositoryImpl(
                 flightWithDetailsEntity.toDomain()
             }
 
-    override suspend fun takeOff(initialLeftFuel: Double, initialRightFuel: Double, initialFuelFlow: Double) {
+    override suspend fun takeOff(initialTank: AircraftTank, initialLeftFuel: Double, initialRightFuel: Double, initialFuelFlow: Double) {
         withContext(dispatcher) {
             val startTimestamp = System.currentTimeMillis()
             val insertedFlightEntityId = flightDao.insertFlight(
@@ -45,7 +45,7 @@ class FlightRepositoryImpl(
             lapTimeDao.insertLapTime(
                 LapTimeEntity(
                     flightId = insertedFlightEntityId,
-                    tank = AircraftTank.LEFT,
+                    tank = initialTank,
                     startTimestamp = startTimestamp,
                     endTimestamp = null
                 )
