@@ -1,6 +1,10 @@
 package com.cedric.domain.model
 
-enum class AircraftTank(val index: Int) {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class AircraftTank(val index: Int) : Parcelable {
     LEFT(0),
     RIGHT(1);
 

@@ -1,6 +1,10 @@
 package com.cedric.domain.model
 
-enum class FuelUnit {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class FuelUnit : Parcelable {
     METRIC,
     IMPERIAL
 }

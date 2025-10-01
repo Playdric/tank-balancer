@@ -21,4 +21,6 @@
     <string name="dismiss">Dismiss</string>
     <string name="unit_liter">L</string>
     <string name="unit_gallon">gal</string>
+    <string name="restore_flight_title">Restore previous flight ?</string>
+    <string name="restore_flight_message">We detected the previous flight did not end, would you like to resume it ?</string>
 </resources>

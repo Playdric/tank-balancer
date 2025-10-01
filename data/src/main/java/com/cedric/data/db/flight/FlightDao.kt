@@ -29,6 +29,7 @@ interface FlightDao {
     @Query("SELECT * FROM Flight ORDER BY id DESC LIMIT 1")
     fun getCurrentFlightSync(): FlightEntity?
 
+    //TODO do not sort by ID but by timestamp to have the real latest for sure
     @Transaction
     @Query("SELECT * FROM Flight ORDER BY id DESC LIMIT 1")
     fun getCurrentFlightWithDetails(): Flow<FlightWithDetailsEntity?>

@@ -21,4 +21,6 @@
     <string name="dismiss">Annuler</string>
     <string name="unit_liter">L</string>
     <string name="unit_gallon">gal</string>
+    <string name="restore_flight_title">Reprendre le vol ?</string>
+    <string name="restore_flight_message">Nous avons détecté que le précédent vol n\'a pas été complété, voulez vous le reprendre ?</string>
 </resources>

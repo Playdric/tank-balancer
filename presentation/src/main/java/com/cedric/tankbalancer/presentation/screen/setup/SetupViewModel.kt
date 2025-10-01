@@ -1,22 +1,20 @@
 package com.cedric.tankbalancer.presentation.screen.setup
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cedric.domain.model.AircraftTank
 import com.cedric.domain.model.FuelUnit
 import com.cedric.tankbalancer.presentation.navigation.TankBalancerNavEntry
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class SetupViewModel : ViewModel() {
+class SetupViewModel(
+    val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SetupUiState())
-    val uiState: StateFlow<SetupUiState> = _uiState.asStateFlow()
+    val uiState = savedStateHandle.getStateFlow(KEY_SAVE_STATE_SETUP, SetupUiState())
 
     private val _navigationEvent = MutableSharedFlow<TankBalancerNavEntry>()
     val navigationEvent = _navigationEvent.asSharedFlow()
@@ -34,34 +32,34 @@ class SetupViewModel : ViewModel() {
     }
 
     private fun onChangeStartingTank(newStartingTank: Int) {
-        _uiState.update { it.copy(startingTank = AircraftTank.fromId(newStartingTank)) }
+        updateSetupUiState { it.copy(startingTank = AircraftTank.fromId(newStartingTank)) }
     }
 
     private fun onChangeFuelFlow(newFuelFlow: String) {
         validateFuel(newFuelFlow)?.let { fuelValue ->
-            _uiState.update { it.copy(fuelFlow = fuelValue) }
+            updateSetupUiState { it.copy(fuelFlow = fuelValue) }
         } ?: run {
-            _uiState.update { it.copy(error = SetupError.FuelError) }
+            updateSetupUiState { it.copy(error = SetupError.FuelError) }
         }
     }
 
     private fun onChangedFuelUnit(newFuelUnit: FuelUnit) {
-        _uiState.update { it.copy(fuelUnit = newFuelUnit) }
+        updateSetupUiState { it.copy(fuelUnit = newFuelUnit) }
     }
 
     private fun onChangeLeftFuelValue(newFuel: String) {
         validateFuel(newFuel)?.let { fuelValue ->
-            _uiState.update { it.copy(leftFuel = fuelValue) }
+            updateSetupUiState { it.copy(leftFuel = fuelValue) }
         } ?: run {
-            _uiState.update { it.copy(error = SetupError.FuelError) }
+            updateSetupUiState { it.copy(error = SetupError.FuelError) }
         }
     }
 
     private fun onChangeRightFuelValue(newFuel: String) {
         validateFuel(newFuel)?.let { fuelValue ->
-            _uiState.update { it.copy(rightFuel = fuelValue) }
+            updateSetupUiState { it.copy(rightFuel = fuelValue) }
         } ?: run {
-            _uiState.update { it.copy(error = SetupError.FuelError) }
+            updateSetupUiState { it.copy(error = SetupError.FuelError) }
         }
     }
 
@@ -73,10 +71,10 @@ class SetupViewModel : ViewModel() {
         viewModelScope.launch {
             _navigationEvent.emit(TankBalancerNavEntry.BalancerScreen(
                 arguments = TankBalancerNavEntry.BalancerScreen.Arguments(
-                    initialFuelLeft = _uiState.value.leftFuel,
-                    initialFuelRight = _uiState.value.rightFuel,
-                    initialFuelFlow = _uiState.value.fuelFlow,
-                    initialTank = _uiState.value.startingTank,
+                    initialFuelLeft = uiState.value.leftFuel,
+                    initialFuelRight = uiState.value.rightFuel,
+                    initialFuelFlow = uiState.value.fuelFlow,
+                    initialTank = uiState.value.startingTank,
                 )
             ))
         }
@@ -84,6 +82,14 @@ class SetupViewModel : ViewModel() {
 
     private fun onAcknowledgeError() {
 
+    }
+
+    private fun updateSetupUiState(function: (SetupUiState) -> SetupUiState) {
+        savedStateHandle[KEY_SAVE_STATE_SETUP] = function(uiState.value)
+    }
+
+    companion object {
+        const val KEY_SAVE_STATE_SETUP = "SAVE_KEY_SETUP"
     }
 }
 

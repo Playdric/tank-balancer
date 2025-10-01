@@ -13,7 +13,7 @@ import com.cedric.domain.model.Flight
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class FlightRepositoryImpl(
@@ -23,10 +23,10 @@ class FlightRepositoryImpl(
     val dispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : FlightRepository {
 
-    override val currentFlight: Flow<Flight>
+    override val currentFlight: Flow<Flight?>
         get() =
-            flightDao.getCurrentFlightWithDetails().mapNotNull { flightWithDetailsEntity ->
-                flightWithDetailsEntity ?: return@mapNotNull null
+            flightDao.getCurrentFlightWithDetails().map { flightWithDetailsEntity ->
+                flightWithDetailsEntity ?: return@map null
                 flightWithDetailsEntity.toDomain()
             }
 

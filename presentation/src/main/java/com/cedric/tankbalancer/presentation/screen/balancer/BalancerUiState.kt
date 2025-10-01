@@ -1,10 +1,12 @@
 package com.cedric.tankbalancer.presentation.screen.balancer
 
+import android.os.Parcelable
 import com.cedric.domain.model.AircraftTank
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.parcelize.Parcelize
 
-
+@Parcelize
 data class BalancerUiState(
     val currentTank: AircraftTank? = null,
     val fuelFlow: Double = 10.0,
@@ -26,16 +28,19 @@ data class BalancerUiState(
     val flightStatus: FlightStatus = FlightStatus.BEFORE_TAKE_OFF,
 
     val balancerError: BalancerError? = null,
-)
+) : Parcelable
 
+@Parcelize
 data class UiLapTime(
     val tank: AircraftTank,
     val startTime: String,
-)
+) : Parcelable
 
-enum class BalancerError
+@Parcelize
+enum class BalancerError : Parcelable
 
-enum class FlightStatus {
+@Parcelize
+enum class FlightStatus : Parcelable {
     BEFORE_TAKE_OFF,
     FLYING,
     STOPOVER,

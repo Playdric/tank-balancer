@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface FlightRepository {
 
-    val currentFlight: Flow<Flight>
+    val currentFlight: Flow<Flight?>
 
     suspend fun takeOff(
         initialTank: AircraftTank,
