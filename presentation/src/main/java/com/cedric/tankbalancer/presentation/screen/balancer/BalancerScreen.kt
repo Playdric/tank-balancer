@@ -1,7 +1,6 @@
 package com.cedric.tankbalancer.presentation.screen.balancer
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -44,8 +44,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cedric.domain.model.AircraftTank
 import com.cedric.tankbalancer.presentation.R
-import com.cedric.tankbalancer.presentation.composable.Aircraft
+import com.cedric.tankbalancer.presentation.composable.AirplaneView
 import com.cedric.tankbalancer.presentation.composable.ErrorDialog
+import com.cedric.tankbalancer.presentation.composable.FuelGauge
 import com.cedric.tankbalancer.presentation.composable.RepeatIconButton
 import com.cedric.tankbalancer.presentation.navigation.TankBalancerNavEntry
 import com.cedric.tankbalancer.presentation.theme.TankBalancerTheme
@@ -96,16 +97,29 @@ fun BalancerScreenContent(
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         Row(
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .height(200.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Aircraft(
-                currentTank = uiState.currentTank,
-                currentTime = uiState.currentTankTime,
-                leftFuel = uiState.leftTankFuel,
-                rightFuel = uiState.rightTankFuel,
-                darkTheme = isSystemInDarkTheme(),
-            )
+            Box(modifier = Modifier.fillMaxSize()) {
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    AirplaneView(
+                        modifier = Modifier
+                            .size(200.dp)
+                    )
+                }
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    FuelGauge(modifier = Modifier.width(80.dp), isSelected = false)
+                    FuelGauge(modifier = Modifier.width(80.dp), textColor = MaterialTheme.colorScheme.background)
+                }
+            }
+
         }
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         when (uiState.flightStatus) {
