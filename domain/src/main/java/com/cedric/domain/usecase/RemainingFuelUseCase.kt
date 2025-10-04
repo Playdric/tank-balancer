@@ -48,6 +48,6 @@ class RemainingFuelUseCase() {
                 flowIndex++
             }
         }
-        return RemainingFuel(left = leftRemaining, right = rightRemaining)
+        return RemainingFuel(left = leftRemaining.coerceAtLeast(0.0), right = rightRemaining.coerceAtLeast(0.0))
     }
 }

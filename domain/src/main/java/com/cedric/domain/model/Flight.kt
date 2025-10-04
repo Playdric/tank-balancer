@@ -11,7 +11,7 @@ data class Flight(
 val Flight.endTimestamp: Long?
     get() {
         val sorted = lapTimes.sortedBy { time -> time.endTimestamp }
-        return if (sorted.first().endTimestamp == null) {
+        return if (sorted.firstOrNull()?.endTimestamp == null) {
             null
         } else {
             sorted.last().endTimestamp

@@ -15,20 +15,30 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
 )
+
+val Typography.milSpec: Typography
+    get() = this.copy(
+        displayLarge = this.displayLarge.milSpecStyle(),
+        displayMedium = this.displayMedium.milSpecStyle(),
+        displaySmall = this.displaySmall.milSpecStyle(),
+        headlineLarge = this.headlineLarge.milSpecStyle(),
+        headlineMedium = this.headlineMedium.milSpecStyle(),
+        headlineSmall = this.headlineSmall.milSpecStyle(),
+        titleLarge = this.titleLarge.milSpecStyle(),
+        titleMedium = this.titleMedium.milSpecStyle(),
+        titleSmall = this.titleSmall.milSpecStyle(),
+        bodyLarge = this.bodyLarge.milSpecStyle(),
+        bodyMedium = this.bodyMedium.milSpecStyle(),
+        bodySmall = this.bodySmall.milSpecStyle(),
+        labelLarge = this.labelLarge.milSpecStyle(),
+        labelMedium = this.labelMedium.milSpecStyle(),
+        labelSmall = this.labelSmall.milSpecStyle()
+    )
+
+private fun TextStyle.milSpecStyle(): TextStyle {
+    return this.copy(
+        fontFamily = milSpecFamily,
+        fontWeight = milSpecWeight
+    )
+}

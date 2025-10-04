@@ -1,6 +1,7 @@
 package com.cedric.tankbalancer.presentation.screen.balancer
 
 import android.os.Parcelable
+import androidx.annotation.FloatRange
 import com.cedric.domain.model.AircraftTank
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -15,11 +16,13 @@ data class BalancerUiState(
 
     val leftTankLapTime: String = "00:00",
     val leftTankTotalTime: String = "00:00",
-    val leftTankFuel: Double = 0.0,
+    val leftTankFuel: String = "0.0",
+    @param:FloatRange(0.0, 1.0) val leftTankFuelPercent: Double = 0.0,
 
     val rightTankLapTime: String = "00:00",
     val rightTankTotalTime: String = "00:00",
-    val rightTankFuel: Double = 0.0,
+    val rightTankFuel: String = "0.0",
+    @param:FloatRange(0.0, 1.0) val rightTankFuelPercent: Double = 0.0,
 
     val range: String = "00:00",
 

@@ -29,14 +29,15 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun FuelGauge(
     modifier: Modifier = Modifier,
-    isSelected: Boolean = true,
+    isSelected: Boolean = false,
     percentage: Float = 0.5F,
     time: String = "1:09:89",
     quantity: String = "78,12",
     cornerRadius: Dp = 10.dp,
     selectedOutlineColor: Color = Color(0xFF0088FF),
     selectedBackgroundColor: Color = Color(0xFF13161f),
-    textColor: Color = MaterialTheme.colorScheme.onBackground,
+    unselectedTextColor: Color = MaterialTheme.colorScheme.onBackground,
+    selectedTextColor: Color = MaterialTheme.colorScheme.background,
     gaugeBackgroundColor: Color = Color(0xFF13161f),
     gaugeOutlineColor: Color = Color(0xFF39414c),
     fuelProgressColor: Color = Color(0xFF396f5f),
@@ -44,6 +45,7 @@ fun FuelGauge(
 
     ) {
     val outlineThickness = 3.dp
+    val textColor = if (isSelected) selectedTextColor else unselectedTextColor
 
     Box(
         modifier = modifier
@@ -71,8 +73,8 @@ fun FuelGauge(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                if (isSelected)
-                    Text(time, color = textColor, style = MaterialTheme.typography.bodyLarge)
+                val txt = if (isSelected) time else ""
+                Text(txt, color = textColor, style = MaterialTheme.typography.bodyLarge)
             }
             Spacer(modifier = Modifier.height(5.dp))
             Row(
@@ -85,7 +87,8 @@ fun FuelGauge(
                     backgroundColor = gaugeBackgroundColor,
                     outlineColor = gaugeOutlineColor,
                     fuelProgressColor = fuelProgressColor,
-                    fuelMarkColor = fuelMarkColor
+                    fuelMarkColor = fuelMarkColor,
+                    percentage = percentage,
                 )
             }
             Spacer(modifier = Modifier.height(5.dp))

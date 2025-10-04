@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -44,9 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cedric.domain.model.AircraftTank
 import com.cedric.tankbalancer.presentation.R
-import com.cedric.tankbalancer.presentation.composable.AirplaneView
+import com.cedric.tankbalancer.presentation.composable.CombinedFuelGauge
 import com.cedric.tankbalancer.presentation.composable.ErrorDialog
-import com.cedric.tankbalancer.presentation.composable.FuelGauge
 import com.cedric.tankbalancer.presentation.composable.RepeatIconButton
 import com.cedric.tankbalancer.presentation.navigation.TankBalancerNavEntry
 import com.cedric.tankbalancer.presentation.theme.TankBalancerTheme
@@ -101,22 +99,16 @@ fun BalancerScreenContent(
                 .height(200.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Box(modifier = Modifier.fillMaxSize()) {
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    AirplaneView(
-                        modifier = Modifier
-                            .size(200.dp)
+            Box(modifier = Modifier.height(200.dp)) {
+                Row {
+                    CombinedFuelGauge(
+                        leftPercent = uiState.leftTankFuelPercent,
+                        rightPercent = uiState.rightTankFuelPercent,
+                        leftQuantity = uiState.leftTankFuel,
+                        rightQuantity = uiState.rightTankFuel,
+                        range = uiState.range
                     )
-                }
-                Row(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    FuelGauge(modifier = Modifier.width(80.dp), isSelected = false)
-                    FuelGauge(modifier = Modifier.width(80.dp), textColor = MaterialTheme.colorScheme.background)
+
                 }
             }
 
@@ -459,10 +451,10 @@ fun PreviewBalancerScreen() {
                     currentTank = null,
                     fuelFlow = 12.34,
                     leftTankLapTime = "12.12",
-                    leftTankFuel = 23.45,
+                    leftTankFuel = "23.4",
                     rightTankLapTime = "",
-                    rightTankFuel = 12.21,
-                    range = "fd",
+                    rightTankFuel = "12.2",
+                    range = "00:00",
                     flightStatus = FlightStatus.FLYING,
                     balancerError = null,
                     lapTimes = persistentListOf(
@@ -474,78 +466,78 @@ fun PreviewBalancerScreen() {
                             tank = AircraftTank.RIGHT,
                             startTime = "00:01"
                         ),
-//                        UiLapTime(
-//                            tank = AircraftTank.LEFT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.RIGHT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.LEFT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.RIGHT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.LEFT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.RIGHT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.LEFT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.RIGHT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.LEFT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.RIGHT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.LEFT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.RIGHT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.LEFT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.RIGHT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.LEFT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.RIGHT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.LEFT,
-//                            startTime = "00:01"
-//                        ),
-//                        UiLapTime(
-//                            tank = AircraftTank.RIGHT,
-//                            startTime = "00:01"
-//                        ),
+                        UiLapTime(
+                            tank = AircraftTank.LEFT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.RIGHT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.LEFT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.RIGHT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.LEFT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.RIGHT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.LEFT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.RIGHT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.LEFT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.RIGHT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.LEFT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.RIGHT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.LEFT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.RIGHT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.LEFT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.RIGHT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.LEFT,
+                            startTime = "00:01"
+                        ),
+                        UiLapTime(
+                            tank = AircraftTank.RIGHT,
+                            startTime = "00:01"
+                        ),
                     )
                 )
             )

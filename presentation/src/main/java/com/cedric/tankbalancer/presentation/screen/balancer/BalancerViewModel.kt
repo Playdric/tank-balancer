@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.cedric.domain.flight.FlightRepository
 import com.cedric.domain.flight.FlightTicker
 import com.cedric.domain.formatter.TimeFormatter
+import com.cedric.domain.formatter.toStringWithMaxChar
 import com.cedric.domain.model.AircraftTank
 import com.cedric.domain.model.Flight
+import com.cedric.domain.model.RemainingFuel
 import com.cedric.domain.model.currentTank
 import com.cedric.domain.model.endTimestamp
 import com.cedric.domain.usecase.RemainingFuelUseCase
@@ -52,11 +54,14 @@ class BalancerViewModel(
             totalTime = TimeFormatter.formatElapsedTimeSince(currentFlight.takeOffTimestamp),
             currentTankTime = currentFlight.getCurrentTankLapTime(),
             leftTankTotalTime = TimeFormatter.formatTimestamp(totalTankTimeUseCase(currentFlight, AircraftTank.LEFT)),
-            leftTankFuel = remainingFuel.left,
+            leftTankFuel = remainingFuel.left.toStringWithMaxChar(maxTotalDigits = 3, maxDecimalPlaces = 1),
+            leftTankFuelPercent = remainingFuel.left / currentFlight.initialLeftFuel,
             rightTankTotalTime = TimeFormatter.formatTimestamp(totalTankTimeUseCase(currentFlight, AircraftTank.RIGHT)),
-            rightTankFuel = remainingFuel.right,
+            rightTankFuel = remainingFuel.right.toStringWithMaxChar(maxTotalDigits = 3, maxDecimalPlaces = 1),
+            rightTankFuelPercent = remainingFuel.right / currentFlight.initialRightFuel,
             lapTimes = currentFlight.getUiLapTimes(),
             flightStatus = if (currentFlight.endTimestamp == null) FlightStatus.FLYING else FlightStatus.LANDED,
+            range = getRange(remainingFuel = remainingFuel, currentFuelFlow = currentFuelFlow, currentFlight = currentFlight)
         )
     }.stateIn(
         scope = viewModelScope,
@@ -78,6 +83,19 @@ class BalancerViewModel(
             BalancerAction.ValidFuelFlow -> onValidateFuelFlow()
             BalancerAction.SwitchTank -> onSwitchTank()
             BalancerAction.ConfirmLanding -> onConfirmLanding()
+        }
+    }
+
+    private fun getRange(remainingFuel: RemainingFuel, currentFlight: Flight, currentFuelFlow: Double?): String {
+        val totalFuel = remainingFuel.left + remainingFuel.right
+        val fuelFlow = currentFuelFlow ?: currentFlight.fuelFlows.lastOrNull()?.fuelFlow ?: 0.0
+
+        return if (fuelFlow <= 0) {
+            "--:--"
+        } else {
+            val rangeInHours = totalFuel / fuelFlow
+
+            TimeFormatter.formatHours(rangeInHours)
         }
     }
 

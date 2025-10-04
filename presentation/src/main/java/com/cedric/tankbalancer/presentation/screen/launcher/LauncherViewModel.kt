@@ -36,7 +36,6 @@ class LauncherViewModel(
             isLoading,
             showRestorePreviousStatePopup
         ) { isLoading, showPopup ->
-            Timber.tag("COUCOU").d("LauncherViewModel::null() called with: isLoading = $isLoading, showPopup = $showPopup")
             LauncherUiState(
                 isLoading = isLoading,
                 showRestorePreviousStatePopup = showPopup
