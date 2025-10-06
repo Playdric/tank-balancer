@@ -14,8 +14,8 @@ out/
 # App Release Files
 app/release/*
 
-#  Uncomment the following line in case you need and you don't have the release build type files in your app
-# release/
+#  Uncomment the following line in case you need and you don't have the tank-balancer-keystore.jks build type files in your app
+# tank-balancer-keystore.jks/
 # Gradle files
 .gradle/
 build/
@@ -75,3 +75,4 @@ lint/tmp/
 # App Specific cases 
 app/release/output.json
 .idea/codeStyles/
+/keystore.properties
