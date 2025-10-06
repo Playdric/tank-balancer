@@ -53,7 +53,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 private const val TAG = "BalancerScreen"
 
@@ -71,15 +70,14 @@ fun BalancerScreen(
         navigationEvent?.let { navigate.invoke(it) }
     }
 
-    BalancerScreenContent(uiState = balancerUiState, action = viewModel::onAction, arguments = arguments)
+    BalancerScreenContent(uiState = balancerUiState, action = viewModel::onAction)
 
 }
 
 @Composable
 fun BalancerScreenContent(
     uiState: BalancerUiState,
-    action: (BalancerAction) -> Unit = {},
-    arguments: TankBalancerNavEntry.BalancerScreen.Arguments? = null
+    action: (BalancerAction) -> Unit = {}
 ) {
     var showLandingDialog by remember { mutableStateOf(false) }
     Column(
@@ -116,21 +114,7 @@ fun BalancerScreenContent(
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         when (uiState.flightStatus) {
             FlightStatus.BEFORE_TAKE_OFF -> {
-                BeforeTakeOffControls(onClickTakeOff = {
-                    arguments?.let { args ->
-                        action.invoke(
-                            BalancerAction.TakeOff(
-                                initialFuelLeft = args.initialFuelRight,
-                                initialFuelRight = args.initialFuelRight,
-                                initialFuelFlow = args.initialFuelFlow,
-                                initialTank = args.initialTank
-                            )
-                        )
-                    } ?: run {
-                        Timber.tag(TAG).e("Take Off clicked but arguments are null")
-                    }
-
-                })
+                BeforeTakeOffControls(onClickTakeOff = { action(BalancerAction.TakeOff) })
             }
 
             FlightStatus.FLYING -> {

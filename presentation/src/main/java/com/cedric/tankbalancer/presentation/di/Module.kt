@@ -15,8 +15,8 @@ val presentationModule = module {
             tickerRepository = get(),
             remainingFuelUseCase = get(),
             totalTankTimeUseCase = get(),
+            arguments = getOrNull()
         )
     }
-    viewModelOf(::BalancerViewModel)
     viewModelOf(::SetupViewModel)
 }

@@ -23,12 +23,14 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class BalancerViewModel(
     val flightRepository: FlightRepository,
     val tickerRepository: FlightTicker,
     val remainingFuelUseCase: RemainingFuelUseCase,
     val totalTankTimeUseCase: TotalTankTimeUseCase,
+    val arguments: TankBalancerNavEntry.BalancerScreen.Arguments?,
 ) : ViewModel() {
 
     private val _navigationEvent = MutableSharedFlow<TankBalancerNavEntry>()
@@ -38,6 +40,13 @@ class BalancerViewModel(
      * Flow used to display to the user the quick changing fuel flow
      */
     private val currentFuelFLow: MutableStateFlow<Double?> = MutableStateFlow(null)
+
+    init {
+        if (arguments == null) {
+            Timber.tag(TAG).i("Arguments are null, restoring previous flight")
+            tickerRepository.startTick()
+        }
+    }
 
     val uiState = combine(
         flightRepository.currentFlight,
@@ -71,13 +80,7 @@ class BalancerViewModel(
 
     fun onAction(action: BalancerAction) {
         when (action) {
-            is BalancerAction.TakeOff -> takeOff(
-                initialFuelLeft = action.initialFuelLeft,
-                initialFuelRight = action.initialFuelRight,
-                initialFuelFlow = action.initialFuelFlow,
-                initialTank = action.initialTank,
-            )
-
+            is BalancerAction.TakeOff -> takeOff()
             BalancerAction.IncreaseFuelFlow -> onChangeFuelFlow(increase = true)
             BalancerAction.DecreaseFuelFlow -> onChangeFuelFlow(increase = false)
             BalancerAction.ValidFuelFlow -> onValidateFuelFlow()
@@ -136,24 +139,22 @@ class BalancerViewModel(
     }
 
 
-    private fun takeOff(
-        initialFuelLeft: Double,
-        initialFuelRight: Double,
-        initialFuelFlow: Double,
-        initialTank: AircraftTank,
-    ) {
+    private fun takeOff() {
         viewModelScope.launch {
-            flightRepository.takeOff(
-                initialLeftFuel = initialFuelLeft,
-                initialRightFuel = initialFuelRight,
-                initialFuelFlow = initialFuelFlow,
-                initialTank = initialTank,
-            )
-            tickerRepository.startTick()
+            arguments?.let { args ->
+                flightRepository.takeOff(
+                    initialLeftFuel = args.initialFuelLeft,
+                    initialRightFuel = args.initialFuelRight,
+                    initialFuelFlow = args.initialFuelFlow,
+                    initialTank = args.initialTank,
+                )
+                tickerRepository.startTick()
+            }
         }
     }
 
     companion object {
+        private const val TAG = "BalancerViewModel"
         private const val FUEL_FLOW_CHANGE_RATE = 0.5
     }
 }
