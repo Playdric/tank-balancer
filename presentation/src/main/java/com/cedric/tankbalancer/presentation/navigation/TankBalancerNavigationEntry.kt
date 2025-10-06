@@ -6,7 +6,8 @@ import kotlinx.parcelize.Parcelize
 
 sealed interface TankBalancerNavEntry {
 
-    data object LauncherScreen : TankBalancerNavEntry
+    @Parcelize
+    data object LauncherScreen : TankBalancerNavEntry, Parcelable
 
     @Parcelize
     data class BalancerScreen(val arguments: Arguments? = null) : TankBalancerNavEntry, Parcelable {
@@ -20,5 +21,6 @@ sealed interface TankBalancerNavEntry {
         ) : Parcelable
     }
 
-    data object SetupScreen : TankBalancerNavEntry
+    @Parcelize
+    data object SetupScreen : TankBalancerNavEntry, Parcelable
 }
