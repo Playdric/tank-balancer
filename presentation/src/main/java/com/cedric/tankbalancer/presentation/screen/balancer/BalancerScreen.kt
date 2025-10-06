@@ -94,21 +94,17 @@ fun BalancerScreenContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp),
+                .padding(horizontal = MaterialTheme.spacing.medium),
             horizontalArrangement = Arrangement.Center
         ) {
-            Box(modifier = Modifier.height(200.dp)) {
-                Row {
-                    CombinedFuelGauge(
-                        leftPercent = uiState.leftTankFuelPercent,
-                        rightPercent = uiState.rightTankFuelPercent,
-                        leftQuantity = uiState.leftTankFuel,
-                        rightQuantity = uiState.rightTankFuel,
-                        range = uiState.range
-                    )
-
-                }
-            }
+            CombinedFuelGauge(
+                modifier = Modifier.fillMaxWidth(),
+                leftPercent = uiState.leftTankFuelPercent,
+                rightPercent = uiState.rightTankFuelPercent,
+                leftQuantity = uiState.leftTankFuel,
+                rightQuantity = uiState.rightTankFuel,
+                range = uiState.range
+            )
 
         }
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))

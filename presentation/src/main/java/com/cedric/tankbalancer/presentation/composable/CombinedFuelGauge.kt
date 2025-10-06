@@ -3,11 +3,13 @@ package com.cedric.tankbalancer.presentation.composable
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,21 +24,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.cedric.tankbalancer.presentation.theme.TankBalancerTheme
 import com.cedric.tankbalancer.presentation.theme.milSpec
+import kotlin.random.Random
 
 @Composable
 fun CombinedFuelGauge(
@@ -53,21 +60,52 @@ fun CombinedFuelGauge(
     val leftRotation = minRotation + (maxRotation - minRotation) * leftPercent.coerceIn(0.0, 1.0)
     val rightRotation = -(minRotation + (maxRotation - minRotation) * rightPercent.coerceIn(0.0, 1.0))
 
-    Box(
+
+    BoxWithConstraints(
         modifier = modifier
-            .fillMaxHeight()
+            .fillMaxWidth()
             .aspectRatio(1F)
-            .clip(RoundedCornerShape(5.dp))
+            .clip(RoundedCornerShape(10.dp))
             .background(Color(0xFF919191))
             .padding(5.dp)
     ) {
+        val three = maxWidth * 0.015F
+        val five = maxWidth * 0.025F
+        val oneSevenZero = maxWidth * 0.88F
+
+        val w = this@BoxWithConstraints.maxWidth
+
+        // Top Start Screw
+        Screw(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = five, top = five, bottom = oneSevenZero, end = oneSevenZero)
+        )
+        // Top End Screw
+        Screw(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = oneSevenZero, top = five, bottom = oneSevenZero, end = five)
+        )
+        // Bottom Start Screw
+        Screw(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = five, top = oneSevenZero, bottom = five, end = oneSevenZero)
+        )
+        // Bottom End Screw
+        Screw(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(start = oneSevenZero, top = oneSevenZero, bottom = five, end = five)
+        )
 
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .clip(CircleShape)
                 .background(Color(0xFF282828))
-                .padding(5.dp)
+                .padding(five)
         ) {
 
             Box(
@@ -80,31 +118,37 @@ fun CombinedFuelGauge(
                 ArcWithGraduations(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(20.dp)
+                        .padding(w * 0.1F)
                 )
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 10.dp),
+                        .padding(top = w * 0.055F),
                     contentAlignment = Alignment.TopCenter
 
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 48.dp),
+                        modifier = Modifier.padding(horizontal = w * 0.24F),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(text = "RNG", color = Color.White, style = MaterialTheme.typography.milSpec.bodySmall)
-                        Spacer(modifier = Modifier.width(5.dp))
+                        Text(
+                            text = "RNG",
+                            color = Color.White,
+                            style = MaterialTheme.typography.milSpec.bodySmall,
+                            fontSize = TextUnit(value = w.value * 0.06F, type = TextUnitType.Sp)
+                        )
+                        Spacer(modifier = Modifier.width(five))
                         Text(
                             modifier = Modifier
                                 .weight(1F)
-                                .clip(RoundedCornerShape(5.dp))
+                                .clip(RoundedCornerShape(five))
                                 .background(Color(0xFF151515))
-                                .padding(3.dp),
+                                .padding(three),
                             text = range,
                             style = MaterialTheme.typography.milSpec.bodySmall,
                             color = Color.White,
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
+                            fontSize = TextUnit(value = w.value * 0.06F, type = TextUnitType.Sp)
                         )
                     }
 
@@ -112,37 +156,39 @@ fun CombinedFuelGauge(
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(bottom = 11.dp),
+                        .padding(bottom = w * 0.065F),
                     contentAlignment = Alignment.BottomCenter
 
                 ) {
                     Row(
-                        modifier = Modifier.padding(horizontal = 45.dp),
+                        modifier = Modifier.padding(horizontal = w * 0.225F),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
 
                         Text(
                             modifier = Modifier
                                 .weight(1F)
-                                .clip(RoundedCornerShape(5.dp))
+                                .clip(RoundedCornerShape(five))
                                 .background(Color(0xFF151515))
-                                .padding(3.dp),
+                                .padding(three),
                             text = leftQuantity,
                             style = MaterialTheme.typography.milSpec.bodySmall,
                             color = Color.White,
-                            textAlign = TextAlign.Left
+                            textAlign = TextAlign.Left,
+                            fontSize = TextUnit(value = w.value * 0.06F, type = TextUnitType.Sp)
                         )
-                        Spacer(modifier = Modifier.width(2.dp))
+                        Spacer(modifier = Modifier.width(w * 0.01F))
                         Text(
                             modifier = Modifier
                                 .weight(1F)
-                                .clip(RoundedCornerShape(5.dp))
+                                .clip(RoundedCornerShape(five))
                                 .background(Color(0xFF151515))
-                                .padding(3.dp),
+                                .padding(three),
                             text = rightQuantity,
                             style = MaterialTheme.typography.milSpec.bodySmall,
                             color = Color.White,
-                            textAlign = TextAlign.Right
+                            textAlign = TextAlign.Right,
+                            fontSize = TextUnit(value = w.value * 0.06F, type = TextUnitType.Sp)
                         )
                     }
                 }
@@ -152,7 +198,7 @@ fun CombinedFuelGauge(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val handWeight = 0.2F
-                    val handSize = 125.dp
+                    val handSize = w * 0.7F
                     Box(
                         modifier = Modifier
                             .weight(handWeight)
@@ -185,7 +231,8 @@ fun CombinedFuelGauge(
                         contentAlignment = Alignment.Center
                     ) {
                         VerticalText(
-                            text = "LEFT"
+                            text = "LEFT",
+                            fontSize = TextUnit(value = w.value * 0.08F, type = TextUnitType.Sp)
                         )
                     }
                     Spacer(modifier = Modifier.weight(1F))
@@ -197,7 +244,8 @@ fun CombinedFuelGauge(
                         contentAlignment = Alignment.Center
                     ) {
                         VerticalText(
-                            text = "RIGHT"
+                            text = "RIGHT",
+                            fontSize = TextUnit(value = w.value * 0.08F, type = TextUnitType.Sp)
                         )
                     }
                 }
@@ -210,7 +258,7 @@ fun CombinedFuelGauge(
 }
 
 @Composable
-private fun VerticalText(modifier: Modifier = Modifier, text: String) {
+private fun VerticalText(modifier: Modifier = Modifier, text: String, fontSize: TextUnit) {
     Text(
         modifier = modifier,
         text = text.toCharArray().joinToString("\n"),
@@ -228,6 +276,7 @@ private fun VerticalText(modifier: Modifier = Modifier, text: String) {
             )
         ),
         textAlign = TextAlign.Center,
+        fontSize = fontSize
     )
 }
 
@@ -291,21 +340,6 @@ fun ArcWithGraduations(modifier: Modifier) {
 
 }
 
-@Preview
-@Composable
-fun ArcWithGraduationsPreview(modifier: Modifier = Modifier) {
-    TankBalancerTheme {
-        Box(
-            modifier = Modifier
-                .size(70.dp)
-                .background(Color.Gray),
-            contentAlignment = Alignment.Center
-        ) {
-            ArcWithGraduations(Modifier)
-        }
-    }
-}
-
 @Composable
 fun GaugeHand(handSize: Dp = 50.dp, rotation: Double = 0.0) {
     Canvas(
@@ -340,10 +374,61 @@ fun GaugeHand(handSize: Dp = 50.dp, rotation: Double = 0.0) {
     }
 }
 
+@Composable
+fun Screw(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .clip(CircleShape)
+            .background(Color(0xFF565656)),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.95F)
+                .fillMaxHeight(0.15F)
+                .graphicsLayer {
+                    this.transformOrigin = TransformOrigin.Center
+                    this.rotationZ = Random.nextInt(0, 360).toFloat()
+                }
+                .background(Color(0xFF2A2A2A))
+        )
+    }
+}
 
 @Preview
 @Composable
-fun GaugeHandPreview(modifier: Modifier = Modifier) {
+fun ScrewPreview() {
+    TankBalancerTheme {
+        Box(
+            modifier = Modifier
+                .size(20.dp)
+                .background(Color.Gray),
+            contentAlignment = Alignment.Center
+        ) {
+            Screw(Modifier)
+        }
+    }
+}
+
+@Preview
+@Composable
+fun ArcWithGraduationsPreview() {
+    TankBalancerTheme {
+        Box(
+            modifier = Modifier
+                .size(70.dp)
+                .background(Color.Gray),
+            contentAlignment = Alignment.Center
+        ) {
+            ArcWithGraduations(Modifier)
+        }
+    }
+}
+
+@Preview
+@Composable
+fun GaugeHandPreview() {
     TankBalancerTheme {
         Box(
             modifier = Modifier
@@ -358,7 +443,7 @@ fun GaugeHandPreview(modifier: Modifier = Modifier) {
 
 @Preview
 @Composable
-fun CombinedFuelGaugePreview(modifier: Modifier = Modifier) {
+fun CombinedFuelGaugePreview1() {
     TankBalancerTheme {
         Box(
             modifier = Modifier
@@ -367,9 +452,24 @@ fun CombinedFuelGaugePreview(modifier: Modifier = Modifier) {
             contentAlignment = Alignment.Center
         ) {
             CombinedFuelGauge(
-                modifier = Modifier
-                    .height(200.dp)
-                    .width(200.dp),
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun CombinedFuelGaugePreview() {
+    TankBalancerTheme {
+        Box(
+            modifier = Modifier
+                .size(250.dp)
+                .background(Color.White),
+            contentAlignment = Alignment.Center
+        ) {
+            CombinedFuelGauge(
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
