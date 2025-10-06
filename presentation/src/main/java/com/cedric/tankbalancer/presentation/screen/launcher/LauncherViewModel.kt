@@ -2,7 +2,7 @@ package com.cedric.tankbalancer.presentation.screen.launcher
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cedric.domain.flight.FlightRepository
+import com.cedric.tankbalancer.domain.flight.FlightRepository
 import com.cedric.tankbalancer.presentation.navigation.TankBalancerNavEntry
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

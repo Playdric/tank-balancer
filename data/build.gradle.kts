@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.cedric.data"
+    namespace = "com.cedric.tankbalancer.data"
     compileSdk = 36
 
     defaultConfig {

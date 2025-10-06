@@ -1,9 +1,10 @@
 package com.cedric.domain.usecase
 
-import com.cedric.domain.model.AircraftTank
-import com.cedric.domain.model.Flight
-import com.cedric.domain.model.FuelFlow
-import com.cedric.domain.model.LapTime
+import com.cedric.tankbalancer.domain.model.AircraftTank
+import com.cedric.tankbalancer.domain.model.Flight
+import com.cedric.tankbalancer.domain.model.FuelFlow
+import com.cedric.tankbalancer.domain.model.LapTime
+import com.cedric.tankbalancer.domain.usecase.RemainingFuelUseCase
 import junit.framework.TestCase.assertEquals
 import org.junit.Before
 import org.junit.Test

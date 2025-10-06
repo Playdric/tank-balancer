@@ -21,7 +21,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cedric.domain.model.AircraftTank
+import com.cedric.tankbalancer.domain.model.AircraftTank
 
 @Composable
 fun Aircraft(

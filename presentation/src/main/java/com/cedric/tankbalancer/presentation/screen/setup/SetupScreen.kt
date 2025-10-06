@@ -2,7 +2,6 @@
 
 package com.cedric.tankbalancer.presentation.screen.setup
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,7 +41,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import com.cedric.domain.model.AircraftTank
+import com.cedric.tankbalancer.domain.model.AircraftTank
 import com.cedric.tankbalancer.presentation.R
 import com.cedric.tankbalancer.presentation.composable.FuelUnitDropDownMenu
 import com.cedric.tankbalancer.presentation.navigation.TankBalancerNavEntry

@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cedric.domain.model.FuelUnit
+import com.cedric.tankbalancer.domain.model.FuelUnit
 import com.cedric.tankbalancer.presentation.R
 import com.cedric.tankbalancer.presentation.theme.spacing
 

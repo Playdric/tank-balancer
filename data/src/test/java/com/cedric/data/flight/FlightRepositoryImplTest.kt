@@ -1,13 +1,14 @@
 package com.cedric.data.flight
 
-import com.cedric.data.db.flight.FlightDao
-import com.cedric.data.db.flight.FlightEntity
-import com.cedric.data.db.fuelflow.FuelFlowDao
-import com.cedric.data.db.fuelflow.FuelFlowEntity
-import com.cedric.data.db.laptime.LapTimeDao
-import com.cedric.data.db.laptime.LapTimeEntity
-import com.cedric.domain.flight.FlightRepository
-import com.cedric.domain.model.AircraftTank
+import com.cedric.tankbalancer.data.db.flight.FlightDao
+import com.cedric.tankbalancer.data.db.flight.FlightEntity
+import com.cedric.tankbalancer.data.db.fuelflow.FuelFlowDao
+import com.cedric.tankbalancer.data.db.fuelflow.FuelFlowEntity
+import com.cedric.tankbalancer.data.db.laptime.LapTimeDao
+import com.cedric.tankbalancer.data.db.laptime.LapTimeEntity
+import com.cedric.tankbalancer.data.flight.FlightRepositoryImpl
+import com.cedric.tankbalancer.domain.flight.FlightRepository
+import com.cedric.tankbalancer.domain.model.AircraftTank
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -60,7 +61,12 @@ class FlightRepositoryImplTest {
         coEvery { flightDao.insertFlight(capture(flightEntitySlot)) } returns expectedFlightId
 
         // When
-        flightRepository.takeOff(initialLeftFuel, initialRightFuel, initialFuelFlow)
+        flightRepository.takeOff(
+            initialTank = AircraftTank.LEFT,
+            initialLeftFuel = initialLeftFuel,
+            initialRightFuel = initialRightFuel,
+            initialFuelFlow = initialFuelFlow
+        )
 
         // Then
         coVerify(exactly = 1) { flightDao.insertFlight(any()) }

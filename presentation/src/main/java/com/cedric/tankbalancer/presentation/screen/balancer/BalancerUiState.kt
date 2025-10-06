@@ -2,7 +2,7 @@ package com.cedric.tankbalancer.presentation.screen.balancer
 
 import android.os.Parcelable
 import androidx.annotation.FloatRange
-import com.cedric.domain.model.AircraftTank
+import com.cedric.tankbalancer.domain.model.AircraftTank
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.parcelize.Parcelize

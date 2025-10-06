@@ -41,7 +41,7 @@ import androidx.compose.ui.tooling.preview.Devices.PIXEL_9_PRO
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cedric.domain.model.AircraftTank
+import com.cedric.tankbalancer.domain.model.AircraftTank
 import com.cedric.tankbalancer.presentation.R
 import com.cedric.tankbalancer.presentation.composable.CombinedFuelGauge
 import com.cedric.tankbalancer.presentation.composable.ErrorDialog

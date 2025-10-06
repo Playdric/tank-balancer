@@ -1,7 +1,7 @@
 package com.cedric.tankbalancer.presentation.navigation
 
 import android.os.Parcelable
-import com.cedric.domain.model.AircraftTank
+import com.cedric.tankbalancer.domain.model.AircraftTank
 import kotlinx.parcelize.Parcelize
 
 sealed interface TankBalancerNavEntry {

@@ -16,7 +16,7 @@ val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 android {
-    namespace = "com.cedric.tankbalancer"
+    namespace = "com.cedric.tankbalancer.app"
     compileSdk = 36
 
     defaultConfig {

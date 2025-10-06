@@ -1,6 +1,6 @@
 package com.cedric.tankbalancer.presentation.screen.setup
 
-import com.cedric.domain.model.FuelUnit
+import com.cedric.tankbalancer.domain.model.FuelUnit
 
 sealed interface SetupAction {
     data object ConfirmSetup: SetupAction

@@ -1,6 +1,6 @@
 package com.cedric.tankbalancer.presentation.screen.balancer
 
-import com.cedric.domain.model.AircraftTank
+import com.cedric.tankbalancer.domain.model.AircraftTank
 
 sealed interface BalancerAction {
     data class TakeOff(

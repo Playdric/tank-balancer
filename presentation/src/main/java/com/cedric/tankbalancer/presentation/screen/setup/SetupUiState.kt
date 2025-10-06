@@ -1,8 +1,8 @@
 package com.cedric.tankbalancer.presentation.screen.setup
 
 import android.os.Parcelable
-import com.cedric.domain.model.AircraftTank
-import com.cedric.domain.model.FuelUnit
+import com.cedric.tankbalancer.domain.model.AircraftTank
+import com.cedric.tankbalancer.domain.model.FuelUnit
 import kotlinx.parcelize.Parcelize
 
 @Parcelize

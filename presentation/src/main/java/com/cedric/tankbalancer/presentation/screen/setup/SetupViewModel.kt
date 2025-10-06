@@ -3,8 +3,8 @@ package com.cedric.tankbalancer.presentation.screen.setup
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cedric.domain.model.AircraftTank
-import com.cedric.domain.model.FuelUnit
+import com.cedric.tankbalancer.domain.model.AircraftTank
+import com.cedric.tankbalancer.domain.model.FuelUnit
 import com.cedric.tankbalancer.presentation.navigation.TankBalancerNavEntry
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

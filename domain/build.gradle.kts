@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.cedric.domain"
+    namespace = "com.cedric.tankbalancer.domain"
     compileSdk = 36
 
     defaultConfig {
